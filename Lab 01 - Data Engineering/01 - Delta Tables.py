@@ -256,41 +256,13 @@ dbutils.fs.ls(table_location)
 
 # MAGIC %sql
 # MAGIC 
-# MAGIC select * from stores VERSION AS OF 2 where id = 'MEL02';
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC 
-# MAGIC You can remove files no longer referenced by a Delta table and are older than the retention threshold by running the `VACCUM` command on the table. vacuum is not triggered automatically. The default retention threshold for the files is 7 days.
-# MAGIC 
-# MAGIC `vacuum` deletes only data files, not log files. Log files are deleted automatically and asynchronously after checkpoint operations. The default retention period of log files is 30 days, configurable through the `delta.logRetentionDuration` property which you set with the `ALTER TABLE SET TBLPROPERTIES` SQL method.
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC 
-# MAGIC VACUUM stores
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC 
 # MAGIC select * from stores VERSION AS OF 2 
 # MAGIC where id = 'MEL02';
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
-# MAGIC DESCRIBE HISTORY stores
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC 
-# MAGIC ALTER TABLE stores
-# MAGIC SET TBLPROPERTIES (delta.logRetentionDuration = '180 Days')
+# MAGIC describe history stores
 
 # COMMAND ----------
 
@@ -317,7 +289,6 @@ dbutils.fs.ls(table_location)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
 # MAGIC describe history stores
 
 # COMMAND ----------
@@ -340,13 +311,12 @@ dbutils.fs.ls(table_location)
 # MAGIC 
 # MAGIC delete from stores
 # MAGIC where id = 'BNE02';
-# MAGIC 
-# MAGIC --SELECT * FROM table_changes('stores', 8, 9) -- Note that we increment versions due to UPDATE statements above
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC SELECT * FROM table_changes('stores', 6, 7)
+# MAGIC -- Note that we increment versions due to UPDATE statements above, you may need to check your table history to make sure the versions are valid and the ones you are interested in.
 
 # COMMAND ----------
 
@@ -454,6 +424,67 @@ dbutils.fs.ls(table_location)
 
 # COMMAND ----------
 
+# MAGIC %md ###Vacuum - Clean up old files and retention settings
+# MAGIC 
+# MAGIC You can remove files no longer referenced by a Delta table and are older than the retention threshold by running the `VACCUM` command on the table. vacuum is not triggered automatically. The default retention threshold for the files is 7 days.
+# MAGIC You can change the default for a table with the following syntax
+# MAGIC 
+# MAGIC `ALTER TABLE stores`
+# MAGIC `SET TBLPROPERTIES (delta.deletedFileRetentionDuration = ‘interval 7 Days')`
+# MAGIC 
+# MAGIC `vacuum` deletes only data files, not log files. Log files are deleted automatically and asynchronously after checkpoint operations. The default retention period of log files is 30 days, configurable through the `delta.logRetentionDuration` property which you set with the `ALTER TABLE SET TBLPROPERTIES` SQL method. See syntax below.
+# MAGIC 
+# MAGIC `ALTER TABLE stores`
+# MAGIC `SET TBLPROPERTIES (delta.logRetentionDuration = ‘interval 30 Days')`
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC VACUUM stores retain 0 hours
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC DESCRIBE HISTORY stores
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from stores version as of 5
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC ALTER TABLE stores
+# MAGIC SET TBLPROPERTIES (delta.deletedFileRetentionDuration = 'interval 0 Days' )
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC VACUUM stores retain 0 hours
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from stores version as of 5
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC DESCRIBE HISTORY stores
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC ALTER TABLE stores
+# MAGIC SET TBLPROPERTIES (delta.logRetentionDuration = '180 Days')
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC 
 # MAGIC ### Dynamic Views
@@ -478,7 +509,7 @@ dbutils.fs.ls(table_location)
 # MAGIC   id,
 # MAGIC   name,
 # MAGIC   CASE WHEN
-# MAGIC     is_member('admins') THEN email
+# MAGIC     is_member('external') THEN email
 # MAGIC     ELSE 'REDACTED'
 # MAGIC   END AS email,
 # MAGIC   city,
@@ -503,13 +534,10 @@ dbutils.fs.ls(table_location)
 # MAGIC SELECT *
 # MAGIC FROM stores
 # MAGIC WHERE 
-# MAGIC   (is_member('admins') OR id = 'SYD01');
+# MAGIC   (is_member('external') OR id = 'SYD01');
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC 
 # MAGIC select * from v_stores_country_limited;
-
-# COMMAND ----------
-

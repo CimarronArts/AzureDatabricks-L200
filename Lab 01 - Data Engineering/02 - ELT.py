@@ -1,8 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC 
 # MAGIC # APJuice Lakehouse Platform
-# MAGIC <img src="https://github.com/zivilenorkunaite/apjbootcamp2022/blob/main/images/APJuiceLogo.png?raw=true" style="width: 650px; max-width: 100%; height: auto" />
+# MAGIC <img src="https://github.com/CimarronArts/AzureDatabricks-L200/blob/main/images/APJuiceLogo.png?raw=true" style="width: 650px; max-width: 100%; height: auto" />
 
 # COMMAND ----------
 
@@ -57,7 +56,7 @@ gold_table_path = f"{dbfs_data_path}tables/gold"
 
 autoloader_ingest_path = f"{dbfs_data_path}/autoloader_ingest/"
 
-# Remove all files from location in case there were any
+# Remove all files from dbfs paths in case there were any
 dbutils.fs.rm(bronze_table_path, recurse=True)
 dbutils.fs.rm(silver_table_path, recurse=True)
 dbutils.fs.rm(gold_table_path, recurse=True)
