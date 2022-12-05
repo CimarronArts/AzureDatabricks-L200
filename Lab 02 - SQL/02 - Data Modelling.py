@@ -27,14 +27,16 @@
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC USE <>
+database_name
+
+# COMMAND ----------
+
+spark.sql(f"USE {database_name};")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
-# MAGIC Show tables in <>
+# MAGIC Show tables
 
 # COMMAND ----------
 

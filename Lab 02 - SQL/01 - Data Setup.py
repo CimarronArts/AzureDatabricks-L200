@@ -407,9 +407,3 @@ spark.conf.set("spark.databricks.delta.optimize.maxFileSize", 52428800)
 # MAGIC 
 # MAGIC optimize silver_sale_items
 # MAGIC zorder by sale_id
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC 
-# MAGIC How did this `OPTIMIZE` command help? It is all in Delta Log files!

@@ -9,7 +9,7 @@
 # MAGIC   val username_final = username.split('@')(0)
 # MAGIC   val module_name = spark.conf.get("com.databricks.training.module_name").toLowerCase()
 # MAGIC 
-# MAGIC   val databaseName = (username_final+"_"+module_name).replaceAll("[^a-zA-Z0-9]", "_") + "_db"
+# MAGIC   val databaseName = (username_final+"_"+module_name).replaceAll("[^a-zA-Z0-9]", "_") + "_dbt"
 # MAGIC   spark.conf.set("com.databricks.training.spark.dbName", databaseName)
 # MAGIC   spark.conf.set("com.databricks.training.spark.userName", username_final)
 # MAGIC   databaseName
@@ -26,3 +26,11 @@ displayHTML("""Username is <b style="color:green">{}</b>""".format(username))
 
 base_table_path = f"dbfs:/FileStore/{username}/deltademoasset/"
 local_data_path = f"/dbfs/FileStore/{username}/deltademoasset/"
+
+# COMMAND ----------
+
+spark.sql(f"CREATE DATABASE IF NOT EXISTS {database_name}")
+
+# COMMAND ----------
+
+
