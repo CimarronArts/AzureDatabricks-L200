@@ -9,7 +9,7 @@
 # MAGIC   val username_final = username.split('@')(0)
 # MAGIC   val module_name = spark.conf.get("com.databricks.training.module_name").toLowerCase()
 # MAGIC 
-# MAGIC   val databaseName = (username_final+"_"+module_name).replaceAll("[^a-zA-Z0-9]", "_") + "_dbt"
+# MAGIC   val databaseName = (username_final+"_"+module_name).replaceAll("[^a-zA-Z0-9]", "_") + "_dbsql"
 # MAGIC   spark.conf.set("com.databricks.training.spark.dbName", databaseName)
 # MAGIC   spark.conf.set("com.databricks.training.spark.userName", username_final)
 # MAGIC   databaseName
