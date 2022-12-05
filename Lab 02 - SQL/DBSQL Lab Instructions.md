@@ -41,7 +41,7 @@ We can start to do some analysis on orders by country and city.
 
 ● Write a query to join apj\_sales\_fact table with dim\_store\_locations table. ● Use the editor and the schema browser to try writing your own query to accomplish this, **or** copy and paste the following code into the editor (make sure to replace **'deepak\_sekar\_ap\_juice\_db'** with the relevant database name derived as part of Step 1). ● Execute the query.
 
-| SELECT a.store\_id, a.order\_source, a.order\_state, b.city, b.country\_code, b.name as store\_name, count(\*) as cnt 
+| SELECT a.store\_id, a.order\_source, a.order\_state, b.city, b.country\_code, b.name as store\_name, count(\*) as cnt <br>
 from deepak\_sekar\_ap\_juice\_db.apj\_sales\_fact a join deepak\_sekar\_ap\_juice\_db.dim\_store\_locations b on a.slocation\_skey = b.slocation\_skey group by a.store\_id, a.order\_source, a.order\_state, b.city, b.country\_code, b.name |
 | --- |
 
